@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import os
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model #type:ignore
 from utils.image_processing import process_image
 import numpy as np
 import uuid  

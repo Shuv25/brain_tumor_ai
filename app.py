@@ -9,6 +9,7 @@ load_dotenv()
 from routes.inference import interface_bp
 from routes.report import report_bp
 from routes.chatbot import chatbot_bp
+from routes.cha_with_pdf import chat_with_pdf_bp
 
 app = Flask(__name__)
 
@@ -19,6 +20,7 @@ CORS(app)
 app.register_blueprint(interface_bp, url_prefix="/api/interface")
 app.register_blueprint(report_bp, url_prefix="/api/report")
 app.register_blueprint(chatbot_bp, url_prefix="/api/chatbot")
+app.register_blueprint(chat_with_pdf_bp,url_prefix="/api/chat_with_pdf")
 
 MODEL_DIR = "models"
 MODEL_PATH = os.path.join(MODEL_DIR, "brain_tumor_classifier.h5")
