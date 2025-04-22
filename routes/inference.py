@@ -57,7 +57,8 @@ def predict_image():
             "message": "Image classified successfully",
             "data": {
                 "result": predicted_class,
-                "confidence": float(probability)
+                "confidence": float(probability),
+                "image_path": image_path
             }
         }), 200
 
