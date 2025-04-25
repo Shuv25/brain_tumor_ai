@@ -10,9 +10,6 @@ venv/
 .vscode/
 .idea/
 
-# Env files
-.env
-
 # Uploads / Reports
 uploads/
 reports/
