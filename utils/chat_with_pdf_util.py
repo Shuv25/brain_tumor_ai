@@ -4,6 +4,7 @@ import fitz
 from PIL import Image
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
+import json
 
 MAX_TOKENS_LIMIT = 131072  
 
@@ -48,8 +49,27 @@ def answer_query(context_images, user_query):
     )
 
     system_msg = SystemMessage(
-        content="You are a helpful expert in understanding and analyzing medical documents and reports in PDF form. Based on the images provided, answer user queries accurately and concisely."
+        content=(
+            "If the user greets you (e.g., 'hi', 'hello'), respond formally and politely, "
+            "and always reply using the strict JSON format described below.\n\n"
+            "You are a helpful, precise assistant trained to analyze medical documents, MRI scans, and provide expert-level answers to user queries.\n\n"
+            "When answering any query, including greetings, ALWAYS return your answer in this strict JSON format:\n\n"
+            "{\n"
+            '  "message": "Concise 20-30 word summary of the answer.",\n'
+            '  "description": "Brief and focused explanation (1-2 short paragraphs, directly addressing the query).",\n'
+            '  "lists": ["Optional: include only if needed to break down information", "Each item should be clear and short"]\n'
+            "}\n\n"
+            "Important formatting rules:\n"
+            "- DO NOT include any text outside this JSON structure.\n"
+            "- ONLY include the 'lists' array if it adds value to the explanation.\n"
+            "- DO NOT answer anything beyond what was asked.\n"
+            "- Use plain language suitable for patients or general users.\n"
+            "- Be accurate, to the point, and professional.\n"
+        )
     )
+
+
+
 
     content = [{"type": "text", "text": user_query}]
 
@@ -64,5 +84,6 @@ def answer_query(context_images, user_query):
     message = HumanMessage(content=content)
 
     response = llm.invoke([system_msg, message])
+    parsed_answer = json.loads(response.content)
 
-    return response.content
+    return parsed_answer
